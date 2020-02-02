@@ -5,7 +5,11 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour
 {
     [SerializeField]
+    private bool _isCoopMode = false;
+    [SerializeField]
     private GameObject _enemyPrefab, _enemyContainer;
+    [SerializeField]
+    private GameObject _playerPrefab, _p1Prefab, _p2Prefab;
     [SerializeField]
     private GameObject[] _powerUps;
     private bool _isGameOver = false;
@@ -13,7 +17,15 @@ public class SpawnManager : MonoBehaviour
    
     void Start()
     {
-       
+        if (_isCoopMode)
+        {
+            Instantiate(_p1Prefab);
+            Instantiate(_p2Prefab);
+        }
+        else
+        {
+            Instantiate(_playerPrefab);
+        }
     }
 
     void Update()

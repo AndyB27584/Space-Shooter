@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
     private GameManager _gameManager;
     private GameObject _pauseMenu;
     private bool _isGamePaused = false;
+    
 
     // Start is called before the first frame update
     void Start()

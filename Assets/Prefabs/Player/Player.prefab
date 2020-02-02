@@ -168,6 +168,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa62025b73cf3457fa3f8bc5183770b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isPlayer1: 0
+  _isPlayer2: 0
   _laserPrefab: {fileID: 8511786041596474322, guid: 345482ac356ff43a5a8815801be6e4ac,
     type: 3}
   _tripleShotPrefab: {fileID: 3933433502353327054, guid: aeaea293abbe14c12898c3fcdae65228,
@@ -177,8 +179,6 @@ MonoBehaviour:
   _playerDamage:
   - {fileID: 1090235675907849124}
   - {fileID: 6964869387906740880}
-  uIManager: {fileID: 0}
-  gameManager: {fileID: 0}
 --- !u!82 &2034030586
 AudioSource:
   m_ObjectHideFlags: 0

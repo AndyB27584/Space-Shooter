@@ -5,8 +5,12 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField]
+    private int _playerTypeIndex; //check the switch statement in Start() for Player types
+    [SerializeField]
     private GameObject _laserPrefab, _tripleShotPrefab, _explosionPrefab;
     private SpawnManager _spawnManager;
+    private UIManager _uIManager;
+    private GameManager _gameManager;
     private float _speed = 9.0f, _coolDown = 0.5f, _timeToFire = 0.0f;
     private float _tripleShotLength = 5.0f, _tripleShotTime = -1.0f;
     private float _speedPULength = 5.0f, _speedPUTime = -1.0f, _speedPUMultiplier = 1.5f;
@@ -16,10 +20,7 @@ public class Player : MonoBehaviour
     private SpriteRenderer _shieldSpriteRenderer;
     [SerializeField]
     private GameObject [] _playerDamage;
-    [SerializeField]
-    private UIManager uIManager;
-    [SerializeField]
-    private GameManager gameManager;
+    
     private AudioSource _powerupAudio;
     
 
@@ -32,13 +33,39 @@ public class Player : MonoBehaviour
             Debug.LogError("Spawn Manager is NULL");
         }
 
+        _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
+        if (_gameManager == null)
+        {
+            Debug.LogError("Game Manager is NULL");
+        }
+
+        _uIManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        if (_uIManager == null)
+        {
+            Debug.LogError("UI Manager is NULL");
+        }
+
         _powerupAudio = GetComponent<AudioSource>();
         _animator = GetComponent<Animator>();
         _shieldSpriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>(); //Child index 0 is the shield gameobject
         _playerDamage[0].SetActive(false);//Damage prefab on left engine
         _playerDamage[1].SetActive(false); //Damage prefab on right engine
 
-        transform.position = new Vector3(0, 0, 0);
+        switch (_playerTypeIndex)
+        {
+            case 0: //single player
+                transform.position = new Vector3(0, 0, 0);
+                break;
+            case 1: //p1 in coop mode
+                transform.position = new Vector3(-4.8f, 0, 0);
+                break;
+            case 2: //p2 in coop mode
+                transform.position = new Vector3(4.8f, 0, 0);
+                break;
+            default:
+                break;
+        }
+        
     }
 
     void Update()
@@ -125,7 +152,7 @@ public class Player : MonoBehaviour
         else
         {
             _lives--;
-            uIManager.UpdateLivesImage(_lives);
+            _uIManager.UpdateLivesImage(_lives);
             if (_lives == 2)
             {
                 int randomDamageIndex = Random.Range(0, 2);
@@ -156,8 +183,8 @@ public class Player : MonoBehaviour
     {
         Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
         _spawnManager.StopSpawning();
-        uIManager.GameOverUISequence();
-        gameManager.GameOver();
+        _uIManager.GameOverUISequence();
+        _gameManager.GameOver();
         Destroy(this.gameObject);
     }
 
@@ -179,6 +206,6 @@ public class Player : MonoBehaviour
     public void UpdatePlayerScore(int increment)
     {
         _score += increment;
-        uIManager.UpdateScoreText(_score);
+        _uIManager.UpdateScoreText(_score);
     }
 }
